@@ -1,9 +1,27 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.utils.timezone import now
+
 from .models import *
 from .forms import ProductForm
-from django.utils.timezone import now
+
 # admin.site.register(Product)
 
+# admin.site.register(MyUser)
+
+@admin.register(MyUser)
+class MyUserAdmin(UserAdmin):
+    model = MyUser
+
+    list_display = ('id', 'email', 'full_name', 'is_staff', 'is_superuser')
+    ordering = ('id', )
+
+    def full_name(self, user:MyUser):
+        return f"{user.first_name} {user.last_name}"
+    
+    full_name.short_description = "Полное имя"
+
+#region Client site models
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     form = ProductForm
