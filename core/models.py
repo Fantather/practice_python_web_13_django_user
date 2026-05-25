@@ -11,7 +11,7 @@ def set_no_set(value):
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         email = self.normalize_email
-        user = self.model(email, **extra_fields)
+        user = self.model(email = email, **extra_fields)
         user.set_password(password)
         user.save()
         return user
@@ -22,7 +22,7 @@ class MyUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
-def MyUser(AbstractBaseUser, PermissionsMixin):
+class MyUser(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -45,6 +45,7 @@ def MyUser(AbstractBaseUser, PermissionsMixin):
     
 
 #region -- Client site models
+
 class Category(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -135,4 +136,5 @@ class Product(models.Model):
         permissions = [
             ("my_permission", "Can do something")
         ]
+
 #endregion -- Client site models
